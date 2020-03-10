@@ -55,7 +55,7 @@ func InitRouter() *gin.Engine {
 	//home.Use(jwt.JWT())
 	{
 		home.GET("/userinfo", Userinfo)
-		home.GET("/ingresslist", Ingresslist)
+		home.GET("/table", Ingresslist)
 		//        home.GET("/table", Table)
 		//        home.POST("/adddomain", AddDomain)
 		//        home.POST("/deldomain", DelDomain)
