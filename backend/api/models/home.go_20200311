@@ -52,15 +52,17 @@ type IngressJson struct {
 
 //在namespace中获取该命名空间中的ingress信息列表
 //func (ingmeta *IngressMeta) ListIngress(clientset *kubernetes.Clientset, namespace string) v1beta1.Ingress {
-func (ingmeta *IngressMeta) ListIngress(namespace string) (ingresses []IngressMeta, err error) {
-	//初始化clientset
+func ListIngress(namespace string) (value string, err error) {
+	//if clientset != nil {
+	//	clientset, _ := kubeconfig.NewClientset()
+	//}
+
 	clientset, _ := kubedata.NewClientset()
+	//defer clientset.Close()
 
 	//创建map和slince
 	var m map[string]interface{}
 	var s []map[string]interface{}
-
-	var value string
 
 	//列出namespace下的所有ingress
 	ingressList, err := clientset.ExtensionsV1beta1().Ingresses(namespace).List(metav1.ListOptions{})
@@ -71,10 +73,9 @@ func (ingmeta *IngressMeta) ListIngress(namespace string) (ingresses []IngressMe
 
 	if len(ingressCtrls) > 0 {
 		for _, ingress := range ingressCtrls {
-
+			//fmt.Printf("Rules %s exists in namespace %s\n", ingress.Spec.Rules[0].IngressRuleValue.HTTP.Paths[0].Backend.ServiceName, ingress.Namespace)
 			//将获取的ingress中的信息JSON序列化
 			m = make(map[string]interface{})
-
 			m["id"] = "650000199402171139"
 			m["ingressname"] = ingress.Name
 			m["namespace"] = namespace
@@ -87,15 +88,12 @@ func (ingmeta *IngressMeta) ListIngress(namespace string) (ingresses []IngressMe
 				fmt.Printf("json error %v\n", err)
 			}
 			value = string(data)
+			//fmt.Println(string(data))
 		}
 	} else {
 		fmt.Println("no ingress found")
 	}
-
-	err = json.Unmarshal([]byte(value), &ingresses)
-
-	//return , err
-	return
+	return value, err
 }
 
 //func main() {

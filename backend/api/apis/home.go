@@ -4,12 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/liyinda/ingress-admin/backend/api/models"
 	//"github.com/gin-gonic/contrib/sessions"
-	//"fmt"
+	"fmt"
 	//"net"
 	"net/http"
 	//"strings"
+	"github.com/liyinda/ingress-admin/backend/pkg/e"
 	//"github.com/liyinda/viewdns/backend/pkg/util"
-	//"github.com/liyinda/ingress-admin/backend/pkg/e"
 	//"strconv"
 	//"encoding/json"
 )
@@ -70,15 +70,38 @@ import (
 
 //查看kubernetes中ingress列表信息
 func Ingresslist(c *gin.Context) {
-	//获取POST中json参数
-	//var json models.Ingress
+	//获取session中的user信息
+	//session := sessions.Default(c)
+	//user := session.Get("user")
+
+	//定义HTTP状态码
+	code := e.INVALID_PARAMS
 
 	//获取ingress信息表
-	result, _ := models.ListIngress("kube-system")
+	//items, err := models.ListIngress("kube-system")
+	var json models.IngressMeta
+
+	//items, err := json.ListIngress("kube-system")
+	items, err := json.ListIngress("developer-center")
+
+	fmt.Println(items)
+
+	if err != nil {
+		code = e.ERROR
+	} else {
+		code = e.SUCCESS
+	}
+
+	data := gin.H{
+		"items": items,
+		"total": 2,
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"msg": result,
+		"code": code,
+		"data": data,
 	})
+
 }
 
 //func Table(c *gin.Context) {
