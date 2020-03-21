@@ -85,7 +85,7 @@ func Ingresslist(c *gin.Context) {
 	//items, err := json.ListIngress("kube-system")
 	items, err := json.ListIngress("developer-center")
 
-	fmt.Println(items)
+	//fmt.Println(items)
 
 	if err != nil {
 		code = e.ERROR
@@ -129,14 +129,14 @@ func AddIngress(c *gin.Context) {
 		annotations["nginx.ingress.kubernetes.io/limit-rps"] = rps
 
 		var json models.IngressMeta
-		json.IngressName = ingressname
+		json.Name = ingressname
 		json.NameSpace = namespace
 		json.Host = host
-		json.Path = path
+		json.Paths[0].Path = path
 		json.Annotations = annotations
-		json.ServiceName = servicename
+		json.Paths[0].ServiceName = servicename
 		// IntOrString 这里设置为0, 意为数据类型为整型
-		json.ServicePort = intstr.IntOrString{
+		json.Paths[0].ServicePort = intstr.IntOrString{
 			Type:   0,
 			IntVal: int32(intServiceport),
 		}
