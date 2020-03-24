@@ -111,46 +111,78 @@ func AddIngress(c *gin.Context) {
 	ingressname := c.Query("ingressname")
 	namespace := c.Query("namespace")
 	host := c.Query("host")
-	path := c.Query("path")
 	rps := c.Query("rps")
-	servicename := c.Query("servicename")
-	serviceport := c.Query("serviceport")
-	//string转int32
-	intServiceport, err := strconv.ParseInt(serviceport, 10, 32)
-	//判断port为整数
-	if err != nil {
-		code = e.ERROR
-		fmt.Println(err)
-	} else {
-		code = e.SUCCESS
-		//声明map
-		var annotations map[string]string
-		annotations = make(map[string]string, 10)
-		annotations["nginx.ingress.kubernetes.io/limit-rps"] = rps
+	//获取数组
+	path := c.QueryArray("path")
+	servicename := c.QueryArray("servicename")
+	serviceport := c.QueryArray("serviceport")
 
-		var json models.IngressMeta
-		json.Name = ingressname
-		json.NameSpace = namespace
-		json.Host = host
-		json.Paths[0].Path = path
-		json.Annotations = annotations
-		json.Paths[0].ServiceName = servicename
-		// IntOrString 这里设置为0, 意为数据类型为整型
-		json.Paths[0].ServicePort = intstr.IntOrString{
+	//string转int32
+	//intServiceport, err := strconv.ParseInt(serviceport, 10, 32)
+	//判断port为整数
+	//if err != nil {
+	//	code = e.ERROR
+	//	fmt.Println(err)
+	//} else {
+	code = e.SUCCESS
+	//声明map
+	var annotations map[string]string
+	annotations = make(map[string]string, 10)
+	annotations["nginx.ingress.kubernetes.io/limit-rps"] = rps
+
+	var json models.IngressMeta
+	json.Name = ingressname
+	json.NameSpace = namespace
+	json.Host = host
+	json.Annotations = annotations
+
+	//var jsonChildren models.IngressPaths
+	//jsonChildren.Path = path
+	//jsonChildren.ServiceName = servicename
+	//json.Paths[0].Path = path
+	//json.Paths[0].ServiceName = servicename
+
+	// IntOrString 这里设置为0, 意为数据类型为整型
+	//json.Paths[0].ServicePort = intstr.IntOrString{
+	//jsonChildren.ServicePort = intstr.IntOrString{
+	//		Type:   0,
+	//		IntVal: int32(intServiceport),
+	//	}
+
+	//申明结构体数组
+	jsonChildrenArray := []models.IngressPaths{}
+	//使用IngressPaths结构体
+	var jsonChildren models.IngressPaths
+
+	for i := 0; i < len(path); i++ {
+		jsonChildren.Path = path[i]
+		jsonChildren.ServiceName = servicename[i]
+		//string转int32
+		intServiceport, _ := strconv.ParseInt(serviceport[i], 10, 32)
+		jsonChildren.ServicePort = intstr.IntOrString{
 			Type:   0,
 			IntVal: int32(intServiceport),
 		}
-		//创建ingress
-		res := json.CreateIngress("developer-center")
-		if res == false {
-			code = e.ERROR
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"code": code,
-			"data": ingressname,
-		})
+		jsonChildrenArray = append(jsonChildrenArray, jsonChildren)
+		//res := json.CreateIngress("developer-center")
+		//if res == false {
+		//	code = e.ERROR
+		//}
 	}
+	fmt.Println(jsonChildrenArray)
+	json.Paths = jsonChildrenArray
+
+	//创建ingress
+	res := json.CreateIngress("developer-center", len(path))
+	if res == false {
+		code = e.ERROR
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"data": ingressname,
+	})
+	//}
 
 }
 

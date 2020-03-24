@@ -75,13 +75,13 @@ type IngressMeta struct {
 	NameSpace   string            `json:"namespace"`
 	Annotations map[string]string `json:"annotations"`
 	Host        string            `json:"host"`
-	Paths       []IngressPaths    `json:"paths"`
+	Paths       []IngressPaths    `json:"children"`
 }
 
 type IngressPaths struct {
 	Path        string             `json:"path"`
-	ServiceName string             `json:"serviceName"`
-	ServicePort intstr.IntOrString `json:"servicePort"`
+	ServiceName string             `json:"servicename"`
+	ServicePort intstr.IntOrString `json:"serviceport"`
 }
 
 //在namespace中获取该命名空间中的ingress信息列表
@@ -136,7 +136,87 @@ func (ingmeta *IngressMeta) ListIngress(namespace string) (ingresses []IngressMe
 	return
 }
 
-func (ingmeta *IngressMeta) ReturnIngress() *extensions.Ingress {
+//func (ingmeta *IngressMeta) ReturnIngress() *extensions.Ingress {
+//	ing := &extensions.Ingress{
+//		ObjectMeta: metav1.ObjectMeta{
+//			Name:              ingmeta.Name,
+//			Namespace:         ingmeta.NameSpace,
+//			CreationTimestamp: metav1.NewTime(time.Now()),
+//			Annotations:       ingmeta.Annotations,
+//		},
+//		Spec: extensions.IngressSpec{
+//			Rules: []extensions.IngressRule{
+//				{
+//					Host: ingmeta.Host,
+//					IngressRuleValue: extensions.IngressRuleValue{
+//						HTTP: &extensions.HTTPIngressRuleValue{
+//							Paths: []extensions.HTTPIngressPath{
+//								{
+//									Backend: extensions.IngressBackend{
+//										ServiceName: ingmeta.Paths[0].ServiceName,
+//										ServicePort: ingmeta.Paths[0].ServicePort,
+//									},
+//									Path: ingmeta.Paths[0].Path,
+//								},
+//							},
+//						},
+//					},
+//				},
+//			},
+//		},
+//	}
+//	return ing
+//}
+
+//func (ingmeta *IngressMeta) ReturnIngress() *extensions.Ingress {
+//      ing := &extensions.Ingress{
+//              ObjectMeta: metav1.ObjectMeta{
+//                      Name:              ingmeta.Name,
+//                      Namespace:         ingmeta.NameSpace,
+//                      CreationTimestamp: metav1.NewTime(time.Now()),
+//                      Annotations:       ingmeta.Annotations,
+//              },
+//              Spec: extensions.IngressSpec{
+//                      Rules: []extensions.IngressRule{
+//                              {
+//                                      Host: ingmeta.Host,
+//                                      IngressRuleValue: extensions.IngressRuleValue{
+//                                              HTTP: &extensions.HTTPIngressRuleValue{
+//                                                      Paths: []extensions.HTTPIngressPath{
+//                                                              {
+//                                                                      Backend: extensions.IngressBackend{
+//                                                                              ServiceName: ingmeta.Paths[0].ServiceName,
+//                                                                              ServicePort: ingmeta.Paths[0].ServicePort,
+//                                                                      },
+//                                                                      Path: ingmeta.Paths[0].Path,
+//                                                              },
+//                                                      },
+//                                              },
+//                                      },
+//                              },
+//                      },
+//              },
+//      }
+//      return ing
+//}
+
+func (ingmeta *IngressMeta) ReturnIngress(n int) *extensions.Ingress {
+	paths := []extensions.HTTPIngressPath{}
+
+	//for n, _ := range paths {
+	for i := 0; i < n; i++ {
+		ingressBackend := extensions.IngressBackend{
+			ServiceName: ingmeta.Paths[i].ServiceName,
+			ServicePort: ingmeta.Paths[i].ServicePort,
+		}
+		path := extensions.HTTPIngressPath{
+			Backend: ingressBackend,
+			Path:    ingmeta.Paths[i].Path,
+		}
+		paths = append(paths, path)
+	}
+
+	fmt.Println(paths)
 	ing := &extensions.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:              ingmeta.Name,
@@ -150,15 +230,7 @@ func (ingmeta *IngressMeta) ReturnIngress() *extensions.Ingress {
 					Host: ingmeta.Host,
 					IngressRuleValue: extensions.IngressRuleValue{
 						HTTP: &extensions.HTTPIngressRuleValue{
-							Paths: []extensions.HTTPIngressPath{
-								{
-									Backend: extensions.IngressBackend{
-										ServiceName: ingmeta.Paths[0].ServiceName,
-										ServicePort: ingmeta.Paths[0].ServicePort,
-									},
-									Path: ingmeta.Paths[0].Path,
-								},
-							},
+							Paths: paths,
 						},
 					},
 				},
@@ -169,13 +241,14 @@ func (ingmeta *IngressMeta) ReturnIngress() *extensions.Ingress {
 }
 
 //在namespace中创建该命名空间中的ingress
-func (ingmeta *IngressMeta) CreateIngress(namespace string) bool {
+func (ingmeta *IngressMeta) CreateIngress(namespace string, n int) bool {
 	//初始化clientset
 	clientset, _ := kubedata.NewClientset()
 
 	//使用结构体,创建ingress
-	ing := ingmeta.ReturnIngress()
+	ing := ingmeta.ReturnIngress(n)
 	_, err := clientset.ExtensionsV1beta1().Ingresses(namespace).Create(ing)
+	//_, err := clientset.ExtensionsV1beta1().Ingresses(namespace).Update(ing)
 	if err != nil {
 		fmt.Println(err.Error())
 		return false
