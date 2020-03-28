@@ -5,9 +5,9 @@ import (
 	. "github.com/liyinda/ingress-admin/backend/api/apis"
 	"net/http"
 	//"fmt"
-	//"github.com/liyinda/viewdns/backend/middleware/jwt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/sessions"
+	"github.com/liyinda/viewdns/backend/middleware/jwt"
 )
 
 func InitRouter() *gin.Engine {
@@ -39,6 +39,12 @@ func InitRouter() *gin.Engine {
 		AllowOrigins:     []string{"http://localhost:9528"},
 	}))
 
+	//引用静态资源
+	router.LoadHTMLGlob("dist/*.html")
+	router.LoadHTMLFiles("static/*/*")
+	router.Static("/static", "./dist/static")
+	router.StaticFile("/vue/", "dist/index.html")
+
 	//设置sessions
 	store := sessions.NewCookieStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
@@ -52,17 +58,20 @@ func InitRouter() *gin.Engine {
 
 	//用户管理入口
 	home := router.Group("/home")
-	//home.Use(jwt.JWT())
+	//认证授权
+	home.Use(jwt.JWT())
 	{
 		home.GET("/userinfo", Userinfo)
 		home.GET("/table", Ingresslist)
+		home.GET("/annotations", Annotationslist)
 		home.POST("/add", AddIngress)
+		home.POST("/del", DelIngress)
+		home.POST("/update", EditIngress)
 		//        home.GET("/table", Table)
 		//        home.POST("/adddomain", AddDomain)
 		//        home.POST("/deldomain", DelDomain)
 	}
-	//    //home.Use(AuthRequired())
-	//
+	home.Use(AuthRequired())
 
 	//定义默认路由
 	router.NoRoute(func(c *gin.Context) {
