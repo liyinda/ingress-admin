@@ -1,0 +1,78 @@
+<template>
+  <div class="app-container">
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row
+    >
+      <el-table-column align="center" label="ID" width="50">
+        <template slot-scope="scope">
+          {{ scope.$index }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Ingress Name" width="150" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Namespace" width="150" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.namespace }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Service Name" width="150" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.ServiceName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Service Port" width="150" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.ServicePort }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Path" width="100" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.Path }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Rps" width="60" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.Rps }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Rule Host">
+        <template slot-scope="scope">
+          <span>{{ scope.row.host }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+
+<script>
+import { getList } from '@/api/table'
+
+export default {
+  data() {
+    return {
+      list: null,
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      getList().then(response => {
+        this.list = response.data.items
+        this.listLoading = false
+      })
+    }
+  }
+}
+</script>

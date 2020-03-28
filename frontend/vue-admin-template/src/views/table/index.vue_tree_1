@@ -1,0 +1,49 @@
+<template>
+  <div class="contains">
+    <h1>树表格实现</h1>
+    <tree-table ref="recTree" :list.sync="list" @actionFunc="actionFunc" @deleteFunc="deleteFunc" @handlerExpand="handlerExpand" @orderByFunc="orderByFunc"></tree-table>
+  </div>
+</template>
+
+<script>
+import { getList } from '@/api/table'
+import treeTable from '@/components/pc/tree-table.vue'
+
+export default {
+  data() {
+    return {
+      list: null,
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  components: {
+    treeTable
+  },
+  methods: {
+    orderByFunc(val) {
+      alert('排序')
+      alert(val)
+    },
+    actionFunc(m) {
+      alert('编辑')
+    },
+    deleteFunc(m) {
+      alert('删除')
+    },
+    handlerExpand(m) {
+      console.log('展开/收缩')
+      m.isExpand = !m.isExpand
+    },
+    fetchData() {
+      this.listLoading = true
+      getList().then(response => {
+        this.list = response.data.items
+        this.listLoading = false
+      })
+    }
+  }
+}
+</script>

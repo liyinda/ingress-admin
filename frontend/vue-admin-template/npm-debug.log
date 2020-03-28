@@ -1,0 +1,76 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'bugs', 'vue-admin-template' ]
+2 info using npm@3.10.10
+3 info using node@v6.12.3
+4 silly fetchPackageMetaData vue-admin-template
+5 silly fetchNamedPackageData vue-admin-template
+6 silly mapToRegistry name vue-admin-template
+7 silly mapToRegistry using default registry
+8 silly mapToRegistry registry https://registry.npmjs.org/
+9 silly mapToRegistry data Result {
+9 silly mapToRegistry   raw: 'vue-admin-template',
+9 silly mapToRegistry   scope: null,
+9 silly mapToRegistry   escapedName: 'vue-admin-template',
+9 silly mapToRegistry   name: 'vue-admin-template',
+9 silly mapToRegistry   rawSpec: '',
+9 silly mapToRegistry   spec: 'latest',
+9 silly mapToRegistry   type: 'tag' }
+10 silly mapToRegistry uri https://registry.npmjs.org/vue-admin-template
+11 verbose request uri https://registry.npmjs.org/vue-admin-template
+12 verbose request no auth needed
+13 info attempt registry request try #1 at 3:52:35 PM
+14 verbose request id 29e628f8964735d8
+15 http request GET https://registry.npmjs.org/vue-admin-template
+16 http 200 https://registry.npmjs.org/vue-admin-template
+17 verbose headers { date: 'Tue, 03 Mar 2020 07:52:37 GMT',
+17 verbose headers   'content-type': 'application/json; charset=UTF-8',
+17 verbose headers   'transfer-encoding': 'chunked',
+17 verbose headers   connection: 'keep-alive',
+17 verbose headers   'set-cookie': [ '__cfduid=d3fa443797f7a9bfa2f36d999eb5757961583221957; expires=Thu, 02-Apr-20 07:52:37 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+17 verbose headers   'cf-ray': '56e1c7743d28e82d-LAX',
+17 verbose headers   'cache-control': 'public, max-age=300',
+17 verbose headers   etag: 'W/"77a6c29135fe117d12fd2708dd33d1f1"',
+17 verbose headers   'last-modified': 'Sun, 27 May 2018 21:09:04 GMT',
+17 verbose headers   vary: 'accept-encoding, accept',
+17 verbose headers   'cf-cache-status': 'EXPIRED',
+17 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+17 verbose headers   server: 'cloudflare',
+17 verbose headers   'content-encoding': 'gzip' }
+18 silly get cb [ 200,
+18 silly get   { date: 'Tue, 03 Mar 2020 07:52:37 GMT',
+18 silly get     'content-type': 'application/json; charset=UTF-8',
+18 silly get     'transfer-encoding': 'chunked',
+18 silly get     connection: 'keep-alive',
+18 silly get     'set-cookie': [ '__cfduid=d3fa443797f7a9bfa2f36d999eb5757961583221957; expires=Thu, 02-Apr-20 07:52:37 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+18 silly get     'cf-ray': '56e1c7743d28e82d-LAX',
+18 silly get     'cache-control': 'public, max-age=300',
+18 silly get     etag: 'W/"77a6c29135fe117d12fd2708dd33d1f1"',
+18 silly get     'last-modified': 'Sun, 27 May 2018 21:09:04 GMT',
+18 silly get     vary: 'accept-encoding, accept',
+18 silly get     'cf-cache-status': 'EXPIRED',
+18 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+18 silly get     server: 'cloudflare',
+18 silly get     'content-encoding': 'gzip' } ]
+19 verbose get saving vue-admin-template to /root/.npm/registry.npmjs.org/vue-admin-template/.cache.json
+20 verbose correctMkdir /root/.npm correctMkdir not in flight; initializing
+21 silly bugs url https://www.npmjs.org/package/vue-admin-template
+22 verbose stack Error: spawn xdg-open ENOENT
+22 verbose stack     at exports._errnoException (util.js:1020:11)
+22 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:197:32)
+22 verbose stack     at onErrorNT (internal/child_process.js:376:16)
+22 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:80:11)
+22 verbose stack     at process._tickCallback (internal/process/next_tick.js:104:9)
+23 verbose cwd /home/viewdns/frontend/vue-admin-template
+24 error Linux 3.10.0-862.3.3.el7.x86_64
+25 error argv "/usr/bin/node" "/usr/bin/npm" "bugs" "vue-admin-template"
+26 error node v6.12.3
+27 error npm  v3.10.10
+28 error path xdg-open
+29 error code ENOENT
+30 error errno ENOENT
+31 error syscall spawn xdg-open
+32 error enoent spawn xdg-open ENOENT
+33 error enoent spawn xdg-open ENOENT
+33 error enoent This is most likely not a problem with npm itself
+33 error enoent and is related to npm not being able to find a file.
+34 verbose exit [ 1, true ]
