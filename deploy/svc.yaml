@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: ingress-admin
+    app.kubernetes.io/part-of: ingress-admin
+  name: ingress-admin
+  namespace: ingress-admin
+spec:
+  type: NodePort
+  ports:
+    - port: 8888
+      nodePort: 48888
+  selector:
+    app.kubernetes.io/name: ingress-admin
+    app.kubernetes.io/part-of: ingress-admin
+

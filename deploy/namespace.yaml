@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-admin
+  labels:
+    app.kubernetes.io/name: ingress-admin
+    app.kubernetes.io/part-of: ingress-admin
+
+---
+
