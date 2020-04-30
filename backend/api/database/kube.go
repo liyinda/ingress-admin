@@ -3,7 +3,8 @@ package database
 import (
 	"flag"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/client-go/rest"
+	//"k8s.io/client-go/tools/clientcmd"
 	"path/filepath"
 )
 
@@ -25,11 +26,14 @@ func GetRuntimePath() *string {
 func NewClientset() (*kubernetes.Clientset, error) {
 
 	// 配置 k8s 集群外 kubeconfig 配置文件
-	path := GetRuntimePath()
+	//path := GetRuntimePath()
 
 	//在 kubeconfig 中使用当前上下文环境，config 获取支持 url 和 path 方式
-	config, err := clientcmd.BuildConfigFromFlags("", *path)
-	//config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+	//config, err := clientcmd.BuildConfigFromFlags("", *path)
+
+	// creates the in-cluster config
+	config, err := rest.InClusterConfig()
+
 	if err != nil {
 		panic(err.Error())
 	}

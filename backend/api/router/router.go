@@ -67,9 +67,6 @@ func InitRouter() *gin.Engine {
 		home.POST("/add", AddIngress)
 		home.POST("/del", DelIngress)
 		home.POST("/update", EditIngress)
-		//        home.GET("/table", Table)
-		//        home.POST("/adddomain", AddDomain)
-		//        home.POST("/deldomain", DelDomain)
 	}
 	home.Use(AuthRequired())
 

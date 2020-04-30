@@ -5,6 +5,7 @@ ingress-admin是基于kubernetes中ingress-controller的管理控制台，对于
 到kubernetes集群中，作为Nginx-ingress-controller的ui管理控制台，通过它来管理
 kubernetes中的ingress配置。
 
+<<<<<<< HEAD
 ## 目录
 * [环境](#环境)
 * [下载](#下载)
@@ -213,3 +214,5 @@ vi index.php
 
 更多后台对接改造等您实现
 
+=======
+>>>>>>> 5bc89d95e4c6515e13c0c0f536f74a4b2023522e

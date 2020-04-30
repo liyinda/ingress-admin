@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/liyinda/ingress-admin/backend/api/models"
 	//"net"
-	"net/http"
-	//"strings"
 	"github.com/liyinda/ingress-admin/backend/pkg/e"
+	"net/http"
+	"strings"
 	//"github.com/liyinda/viewdns/backend/pkg/util"
 	"encoding/json"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -158,8 +158,23 @@ func AddIngress(c *gin.Context) {
 	}
 	fmt.Println(mapResult)
 
+	//vue中hashmap无法传递. 需要在后端重新构造
+	var newMapResult map[string]string
+	newMapResult = make(map[string]string)
+	for key, value := range mapResult {
+		if strings.Contains(key, "nginxingresskubernetesio") {
+			newkey := strings.Replace(key, "nginxingresskubernetesio", "nginx.ingress.kubernetes.io", -1)
+			newMapResult[newkey] = value
+
+		} else {
+			newkey := strings.Replace(key, " kubernetesio/ingressclass", " kubernetes.io/ingress.class", -1)
+			newMapResult[newkey] = value
+		}
+
+	}
+
 	//将转化的map结果传递给annotations
-	Json.Annotations = mapResult
+	Json.Annotations = newMapResult
 	//声明map
 	//var annotations map[string]string
 	//annotations = make(map[string]string, 10)
@@ -241,10 +256,24 @@ func EditIngress(c *gin.Context) {
 	if err := json.Unmarshal([]byte(hashmap), &mapResult); err != nil {
 		fmt.Println("unmarshal error: ", err)
 	}
-	fmt.Println(mapResult)
+
+	//vue中hashmap无法传递. 需要在后端重新构造
+	var newMapResult map[string]string
+	newMapResult = make(map[string]string)
+	for key, value := range mapResult {
+		if strings.Contains(key, "nginxingresskubernetesio") {
+			newkey := strings.Replace(key, "nginxingresskubernetesio", "nginx.ingress.kubernetes.io", -1)
+			newMapResult[newkey] = value
+
+		} else {
+			newkey := strings.Replace(key, " kubernetesio/ingressclass", " kubernetes.io/ingress.class", -1)
+			newMapResult[newkey] = value
+		}
+
+	}
 
 	//将转化的map结果传递给annotations
-	Json.Annotations = mapResult
+	Json.Annotations = newMapResult
 
 	//创建ingress
 	res := Json.UpdateIngress("developer-center", len(childrenArray))

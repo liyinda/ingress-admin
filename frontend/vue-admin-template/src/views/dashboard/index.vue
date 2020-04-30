@@ -5,13 +5,19 @@
     <!-- 顶部tabs -->
    <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane class="temp" label="Monitor" name="first">
-      <iframe v-if="ifArr.first" class="ifa" scrolling=auto src="http://172.20.58.151/grafana/d/Vyy4xH2mz/node-exporter-stats?refresh=5m&orgId=1&from=1585205789196&to=1585207589197&var-node=10.16.112.10?" frameborder="0"></iframe>
+
+
+      <input v-model="monitor_url" placeholder="edit me">
+      <p>Message is: {{ monitor_url }}</p>
+
+
+      <iframe v-if="ifArr.first" class="ifa" scrolling=auto :src="monitor_url" frameborder="0"></iframe>
     </el-tab-pane>
     <el-tab-pane class="temp"  label="Install" name="second">
-       <iframe v-if="ifArr.second"   class="ifa" scrolling=auto src="https://segmentfault.com/" frameborder="0"></iframe>
+       <iframe v-if="ifArr.second"   class="ifa" scrolling=auto src="https://github.com/liyinda/ingress-admin" frameborder="0"></iframe>
     </el-tab-pane>
     <el-tab-pane class="temp"  label="Help" name="third">
-       <iframe v-if="ifArr.third"  class="ifa" scrolling=auto src="https://www.baidu.com/" frameborder="0"></iframe>
+       <iframe v-if="ifArr.third"  class="ifa" scrolling=auto src="https://www.google.com/" frameborder="0"></iframe>
     </el-tab-pane>
   </el-tabs>
 
@@ -26,6 +32,9 @@ export default {
   name: 'App',
   data(){
     return{
+        monitor_url: "",
+        message: "www.t.com",
+        value: "te",
         activeName: 'first',
         ifArr:{
           first:true,
@@ -39,6 +48,7 @@ export default {
        let flagName=tab.name
        this.ifArr[flagName]=true
       }
+
   }
 }
 </script>
