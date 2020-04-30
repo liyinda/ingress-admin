@@ -1,0 +1,10 @@
+FROM alpine:3.9
+MAINTAINER "The Ingress-Admin Authors <liyinda0000@163.com>"
+
+ADD config /config
+ADD dist /dist
+ADD ingress-admin /ingress-admin
+
+EXPOSE 8888
+
+ENTRYPOINT ["/ingress-admin"]
